@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy New Year Bhumika ❤️</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Poppins',sans-serif;background:#0b0b0f;color:#fff;overflow:hidden}
+
+    .lock{position:fixed;inset:0;background:linear-gradient(135deg,#141e30,#243b55);display:flex;align-items:center;justify-content:center;z-index:50}
+    .lock-box{background:rgba(255,255,255,.12);padding:40px;border-radius:22px;text-align:center;backdrop-filter:blur(14px);animation:fadeIn 1.2s ease}
+    .lock-box h2{font-family:'Great Vibes',cursive;font-size:2.6rem}
+    .lock-box input{margin-top:12px;padding:12px 20px;border-radius:30px;border:none;font-size:1rem;text-align:center}
+    .lock-box button{margin-top:20px;padding:10px 30px;border:none;border-radius:30px;background:linear-gradient(to right,#ff758c,#ff7eb3);cursor:pointer}
+
+    .slider{display:flex;width:200vw;height:100vh;transition:transform 1.2s cubic-bezier(.77,0,.18,1)}
+    section{width:100vw;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+    .slide1{background:linear-gradient(135deg,#000428,#004e92)}
+    .slide2{background:linear-gradient(135deg,#2c003e,#000)}
+
+    .photo{width:220px;height:220px;border-radius:50%;background:#fff;margin-bottom:25px;box-shadow:0 0 50px rgba(255,255,255,.45);animation:scaleIn 2s ease}
+    h1{font-family:'Great Vibes',cursive;font-size:3.6rem}
+
+    .next{margin-top:40px;padding:12px 38px;border:none;border-radius:30px;background:linear-gradient(to right,#ff9966,#ff5e62);cursor:pointer}
+
+    .envelope{width:160px;height:100px;background:#fff;color:#000;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;cursor:pointer;box-shadow:0 20px 45px rgba(0,0,0,.5);animation:float 3s ease-in-out infinite;transition:.6s}
+    .envelope.hide{opacity:0;transform:scale(.6)}
+
+    .letter{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scaleX(0);transform-origin:left;width:90vw;max-width:760px;height:80vh;background:#f8f1e7;color:#2b1b12;border-radius:22px;box-shadow:0 40px 90px rgba(0,0,0,.45);padding:40px;z-index:20;transition:1.2s;opacity:0;overflow:auto}
+    .letter.open{transform:translate(-50%,-50%) scaleX(1);opacity:1}
+
+    .typing{font-size:1.15rem;line-height:1.9;white-space:pre-line}
+    .signature{margin-top:30px;font-family:'Great Vibes',cursive;font-size:2.3rem}
+
+    .heart{position:absolute;width:25px;height:25px;background:pink;clip-path:polygon(50% 0%,61% 14%,75% 14%,87% 25%,87% 38%,75% 50%,50% 75%,25% 50%,13% 38%,13% 25%,25% 14%,39% 14%);animation:floatHearts 6s linear infinite}
+
+    canvas{position:fixed;inset:0;pointer-events:none;z-index:5}
+
+    @keyframes floatHearts{0%{transform:translateY(100vh);opacity:0}20%{opacity:1}100%{transform:translateY(-10vh);opacity:0}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes scaleIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+    @keyframes float{50%{transform:translateY(-12px)}}
+
+    @media(max-width:600px){h1{font-size:2.6rem}.letter{padding:25px}}
+  </style>
+</head>
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="lock" id="lock">
+  <div class="lock-box">
+    <h2>For Bhumika 💖</h2>
+    <p>Enter the special date</p>
+    <input type="password" id="pass" placeholder="•••••••">
+    <br><button onclick="unlock()">Open</button>
+  </div>
+</div>
+
+<div class="slider" id="slider">
+  <section class="slide1">
+    <img src="photo.jpg" class="photo" alt="Bhumika">
+    <h1>Happy New Year, Bhumika</h1>
+    <button class="next" onclick="nextSlide()">Next ➜</button>
+  </section>
+  <section class="slide2">
+    <div class="envelope" id="envelope" onclick="openLetter()">💌</div>
+  </section>
+</div>
+
+<div class="letter" id="letter">
+  <div class="typing" id="typing"></div>
+  <div class="signature">— Ranveer</div>
+</div>
+
+<div id="hearts"></div>
+
+<script>
+const slider=document.getElementById('slider');
+const letter=document.getElementById('letter');
+const envelope=document.getElementById('envelope');
+const typingBox=document.getElementById('typing');
+const hearts=document.getElementById('hearts');
+
+const message=`As this new year begins, I want you to know something from my heart.\n\nEven though we are miles apart, you’ve become a truly special person in my life.\n\nOne day, this distance will just be a story we smile about.`;
+
+function unlock(){if(pass.value==='8 march')lock.style.display='none';else alert('Wrong password')}
+function nextSlide(){slider.style.transform='translateX(-100vw)'}
+function openLetter(){envelope.classList.add('hide');setTimeout(()=>{letter.classList.add('open');typeText();startHearts();},600)}
+
+function typeText(){let i=0;function t(){if(i<message.length){typingBox.innerHTML+=message.charAt(i);i++;setTimeout(t,40)}}t()}
+
+function startHearts(){setInterval(()=>{const h=document.createElement('div');h.className='heart';h.style.left=Math.random()*100+'vw';hearts.appendChild(h);setTimeout(()=>h.remove(),8000)},500)}
+</script>
+
+</body>
+</html>
